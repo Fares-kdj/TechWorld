@@ -11,6 +11,26 @@ if (isset($_SESSION['admin_id'])) {
 
 $error = '';
 
+// تحميل إعدادات المتجر مباشرة من قاعدة البيانات
+global $pdo;
+try {
+    $stmt = $pdo->prepare("SELECT setting_value FROM settings WHERE setting_key = ?");
+    
+    // جلب اسم الموقع (site_name وليس store_name)
+    $stmt->execute(['site_name']);
+    $result = $stmt->fetch();
+    $storeName = $result ? $result['setting_value'] : 'TechWorld';
+    
+    // جلب شعار الموقع
+    $stmt->execute(['site_logo']);
+    $result = $stmt->fetch();
+    // استخدام المسار الصحيح للشعار كافتراضي
+    $storeLogo = $result ? $result['setting_value'] : 'assets/images/admin-logo.png';
+} catch (Exception $e) {
+    $storeName = 'TechWorld';
+    $storeLogo = 'assets/images/admin-logo.png';
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = clean($_POST['username']);
     $password = $_POST['password'];
@@ -48,8 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - لوحة التحكم</title>
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
@@ -103,8 +125,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="login-card">
         <div class="login-header">
-            <i class="bi bi-shop"></i>
-            <h2>31 Tech Store</h2>
+            <?php if ($storeLogo): ?>
+                <img src="../<?php echo htmlspecialchars($storeLogo); ?>" alt="<?php echo htmlspecialchars($storeName); ?>" style="max-width: 150px; max-height: 80px; margin-bottom: 15px;">
+            <?php else: ?>
+                <i class="bi bi-shop"></i>
+            <?php endif; ?>
+            <h2><?php echo htmlspecialchars($storeName); ?></h2>
             <p class="mb-0">لوحة التحكم</p>
         </div>
         <div class="login-body">
@@ -137,9 +163,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
             
             <div class="text-center mt-3">
+                <a href="forgot-password.php" class="text-decoration-none" style="color: #667eea; font-weight: 500;">
+                    <i class="bi bi-key me-1"></i>نسيت كلمة المرور؟
+                </a>
+            </div>
+            
+            <hr class="my-3">
+            
+            <div class="text-center">
                 <small class="text-muted">
                     <i class="bi bi-info-circle me-1"></i>
-                    المستخدم الافتراضي: admin / كلمة المرور: admin123
+                    للحصول على بيانات الدخول، تواصل مع المدير الرئيسي
                 </small>
             </div>
         </div>

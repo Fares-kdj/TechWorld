@@ -104,7 +104,7 @@ if (isset($_GET['view']) && is_numeric($_GET['view'])) {
     }
 }
 
-$currency = getSetting('currency', 'دج');
+$currency = getSetting('currency_symbol', 'دج');
 ?>
 
 <?php if ($viewOrder): ?>
@@ -211,6 +211,21 @@ $currency = getSetting('currency', 'دج');
                             <p class="mb-0"><?php echo nl2br(htmlspecialchars($viewOrder['notes'])); ?></p>
                         </div>
                     <?php endif; ?>
+                    <hr>
+                    <div class="mb-0">
+                        <label class="text-muted small">طريقة الدفع</label>
+                        <p class="mb-0">
+                            <?php
+                            $paymentMethods = [
+                                'cash_on_delivery' => '<i class="bi bi-cash"></i> الدفع عند الاستلام',
+                                'bank_transfer' => '<i class="bi bi-bank"></i> تحويل بنكي',
+                                'credit_card' => '<i class="bi bi-credit-card"></i> بطاقة ائتمان',
+                                'mada' => '<i class="bi bi-credit-card-2-front"></i> مدى'
+                            ];
+                            echo $paymentMethods[$viewOrder['payment_method']] ?? $viewOrder['payment_method'];
+                            ?>
+                        </p>
+                    </div>
                 </div>
             </div>
             
@@ -358,6 +373,7 @@ $currency = getSetting('currency', 'دج');
                                 <th>رقم الطلب</th>
                                 <th>العميل</th>
                                 <th>المبلغ</th>
+                                <th>طريقة الدفع</th>
                                 <th>العناصر</th>
                                 <th>الحالة</th>
                                 <th>التاريخ</th>
@@ -386,6 +402,20 @@ $currency = getSetting('currency', 'دج');
                                         </div>
                                     </td>
                                     <td><strong><?php echo number_format($order['total']); ?> <?php echo $currency; ?></strong></td>
+                                    <td>
+                                        <?php
+                                        $paymentMethods = [
+                                            'cash_on_delivery' => 'الدفع عند الاستلام',
+                                            'bank_transfer' => 'تحويل بنكي',
+                                            'credit_card' => 'بطاقة ائتمان',
+                                            'mada' => 'مدى'
+                                        ];
+                                        ?>
+                                        <small class="text-muted">
+                                            <i class="bi bi-credit-card me-1"></i>
+                                            <?php echo $paymentMethods[$order['payment_method']] ?? $order['payment_method']; ?>
+                                        </small>
+                                    </td>
                                     <td>
                                         <span class="badge bg-info"><?php echo $order['items_count']; ?> منتج</span>
                                     </td>

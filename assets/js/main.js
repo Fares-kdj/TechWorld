@@ -116,7 +116,7 @@ function updateCartUI() {
                 <p style="font-size: 0.875rem; margin-top: 0.5rem;">ابدأ بإضافة المنتجات</p>
             </div>
         `;
-        if (cartTotal) cartTotal.textContent = '0 ر.س';
+        if (cartTotal) cartTotal.textContent = '0 ' + (typeof CURRENCY_SYMBOL !== 'undefined' ? CURRENCY_SYMBOL : 'دج');
         return;
     }
 
@@ -133,7 +133,7 @@ function updateCartUI() {
                 <div class="cart-item-info">
                     <div class="cart-item-name">${item.name}</div>
                     <div class="cart-item-model">${item.model}</div>
-                    <div class="cart-item-price">${formatPrice(item.price)} د.ج</div>
+                    <div class="cart-item-price">${formatPrice(item.price)} ${typeof CURRENCY_SYMBOL !== 'undefined' ? CURRENCY_SYMBOL : 'دج'}</div>
                     <div class="cart-item-actions">
                         <div class="quantity-control">
                             <button class="quantity-btn" onclick="updateQuantity('${item.id}', -1)">−</button>
@@ -153,7 +153,7 @@ function updateCartUI() {
     });
 
     cartBody.innerHTML = html;
-    if (cartTotal) cartTotal.innerHTML = formatPrice(total) + ' د.ج';
+    if (cartTotal) cartTotal.innerHTML = formatPrice(total) + ' ' + (typeof CURRENCY_SYMBOL !== 'undefined' ? CURRENCY_SYMBOL : 'دج');
 }
 
 /**
@@ -184,12 +184,87 @@ function closeCart() {
  * تفريغ السلة
  */
 function clearCart() {
-    if (confirm('هل أنت متأكد من تفريغ السلة؟')) {
-        cart = [];
-        saveCart();
-        updateCartCount();
-        updateCartUI();
-        showNotification('تم تفريغ السلة', 'info');
+    showConfirmModal(
+        'تفريغ السلة',
+        'هل أنت متأكد من تفريغ السلة؟ سيتم حذف جميع المنتجات.',
+        () => {
+            cart = [];
+            saveCart();
+            updateCartCount();
+            updateCartUI();
+            showNotification('تم تفريغ السلة', 'success');
+        }
+    );
+}
+
+/**
+ * عرض نافذة تأكيد مخصصة
+ */
+function showConfirmModal(title, message, onConfirm) {
+    // إزالة أي modal سابق
+    const existingModal = document.querySelector('.confirm-modal-overlay');
+    if (existingModal) existingModal.remove();
+
+    // إنشاء modal جديد
+    const modalHTML = `
+        <div class="confirm-modal-overlay" onclick="if(event.target === this) closeConfirmModal()">
+            <div class="confirm-modal">
+                <div class="confirm-modal-header">
+                    <h3>${title}</h3>
+                    <button class="confirm-modal-close" onclick="closeConfirmModal()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="confirm-modal-body">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="margin: 0 auto 1rem; display: block;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <p>${message}</p>
+                </div>
+                <div class="confirm-modal-footer">
+                    <button class="btn btn-secondary" onclick="closeConfirmModal()">إلغاء</button>
+                    <button class="btn btn-danger" onclick="confirmAction()">تأكيد</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    document.body.style.overflow = 'hidden';
+
+    // حفظ الدالة للتنفيذ عند التأكيد
+    window.currentConfirmAction = () => {
+        onConfirm();
+        closeConfirmModal();
+    };
+}
+
+/**
+ * إغلاق نافذة التأكيد
+ */
+function closeConfirmModal() {
+    const modal = document.querySelector('.confirm-modal-overlay');
+    if (modal) {
+        modal.style.animation = 'fadeOut 0.2s ease';
+        setTimeout(() => {
+            modal.remove();
+            document.body.style.overflow = '';
+            delete window.currentConfirmAction;
+        }, 200);
+    }
+}
+
+/**
+ * تنفيذ الإجراء المؤكد
+ */
+function confirmAction() {
+    if (window.currentConfirmAction) {
+        window.currentConfirmAction();
     }
 }
 

@@ -34,6 +34,7 @@ elseif ($filters['category']) {
 }
 
 $categories = getAllCategories();
+$currency = getSetting('currency_symbol', 'دج');
 
 include 'includes/header.php';
 ?>
@@ -255,9 +256,9 @@ include 'includes/header.php';
                                 <p class="product-model"><?php echo clean($product['model'] ?? ''); ?></p>
                                 
                                 <div class="product-price">
-                                    <span class="current-price"><?php echo formatPrice($product['price']); ?> د.ج</span>
+                                    <span class="current-price"><?php echo formatPrice($product['price']); ?> <?php echo $currency; ?></span>
                                     <?php if ($product['original_price'] && $product['original_price'] > $product['price']): ?>
-                                        <span class="original-price"><?php echo formatPrice($product['original_price']); ?> د.ج</span>
+                                        <span class="original-price"><?php echo formatPrice($product['original_price']); ?> <?php echo $currency; ?></span>
                                     <?php endif; ?>
                                 </div>
                                 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : dim. 01 fév. 2026 à 01:47
+-- Généré le : dim. 01 fév. 2026 à 04:31
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -37,16 +37,17 @@ CREATE TABLE `admins` (
   `is_active` tinyint(1) DEFAULT 1,
   `last_login` datetime DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `security_code` varchar(50) DEFAULT '2026' COMMENT 'رمز الأمان لاستعادة كلمة المرور'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `admins`
 --
 
-INSERT INTO `admins` (`id`, `username`, `name`, `email`, `password`, `role`, `is_active`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 'fares', 'فارس', 'kouiderdjelloul.fares0@gmail.com', '$2y$10$XgpHsKRp1tcJtSn2wWRWIue4meezgsq8Ogvnj7Y6tU3o8sRas9EE.', 'super_admin', 1, '2026-01-31 22:51:55', '2026-01-31 00:15:51', '2026-01-31 21:53:31'),
-(2, 'mo3o', 'معاذ', 'moad@gmail.com', '$2y$10$moDCTpfrlBQBAC/GARAa3u.A/RHVemllF4UdLPJY1apZIOvwKAog6', 'admin', 1, '2026-01-31 02:11:16', '2026-01-31 01:10:04', '2026-01-31 01:11:16');
+INSERT INTO `admins` (`id`, `username`, `name`, `email`, `password`, `role`, `is_active`, `last_login`, `created_at`, `updated_at`, `security_code`) VALUES
+(1, 'fares', 'فارس', 'kouiderdjelloul.fares0@gmail.com', '$2y$10$PPNRAFmnSvLIR4zcTCLHS.z5QEay0OkLczMdB9TqnlhhHZvGs4jKm', 'super_admin', 1, '2026-02-01 04:26:30', '2026-01-31 00:15:51', '2026-02-01 03:26:30', '29402'),
+(2, 'mo3o', 'معاذ', 'moad@gmail.com', '$2y$10$Tz/cBZjvAcC15.q70rsSqOmQUhEUYg/lcFJX5jOzeN4ND4Bu3bpSC', 'admin', 1, '2026-02-01 04:20:36', '2026-01-31 01:10:04', '2026-02-01 03:20:36', '2026');
 
 -- --------------------------------------------------------
 
@@ -74,7 +75,7 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `name_ar`, `name_en`, `slug`, `description`, `icon`, `image`, `is_active`, `display_order`, `created_at`, `updated_at`) VALUES
 (5, 'قايمر', 'Gaming', 'gaming', '', '💻', NULL, 1, 0, '2026-01-31 01:11:48', '2026-01-31 02:58:17'),
-(7, 'أجهزة الألعاب', 'General', 'general', '', '💻', NULL, 1, 0, '2026-01-31 01:14:16', '2026-01-31 23:12:56');
+(7, 'أجهزة الألعاب', 'General', 'general', '', '💻', NULL, 0, 0, '2026-01-31 01:14:16', '2026-02-01 02:19:33');
 
 -- --------------------------------------------------------
 
@@ -1665,8 +1666,8 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `name`, `email`, `phone`, `address`, `city`, `postal_code`, `password`, `is_registered`, `is_active`, `total_orders`, `total_spent`, `last_order_date`, `created_at`, `updated_at`) VALUES
-(4, 'فارس', 'fares@gmail.com', '0784279410', 'تاست', 'وهران', NULL, NULL, 0, 1, 0, 0.00, NULL, '2026-01-31 02:32:41', '2026-01-31 02:32:41'),
-(5, 'فارس قويدرجلول', '0784279410@local.store', '0784279410', '', 'وهران - بئر الجير - بئر الجير', NULL, NULL, 0, 1, 0, 0.00, NULL, '2026-02-01 00:11:45', '2026-02-01 00:16:47');
+(4, 'فارس قويدرجلول', '0784279410@local.store', '0784279410', '', 'تمنراست - تاظروك - أدلس', NULL, NULL, 0, 1, 0, 0.00, NULL, '2026-01-31 02:32:41', '2026-02-01 03:11:19'),
+(12, 'منال', '0784279412@local.store', '0784279412', '', 'أم البواقي - سوق نعمان - بئر الشهداء', NULL, NULL, 0, 1, 0, 0.00, NULL, '2026-02-01 03:12:41', '2026-02-01 03:12:41');
 
 -- --------------------------------------------------------
 
@@ -2272,6 +2273,15 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Déchargement des données de la table `orders`
+--
+
+INSERT INTO `orders` (`id`, `order_number`, `customer_id`, `customer_name`, `customer_email`, `customer_phone`, `shipping_address`, `shipping_city`, `postal_code`, `subtotal`, `tax`, `shipping_cost`, `discount`, `total`, `status`, `payment_method`, `payment_status`, `notes`, `admin_notes`, `tracking_number`, `ordered_at`, `confirmed_at`, `shipped_at`, `delivered_at`, `updated_at`) VALUES
+(7, 'ORD-20260201-D05287', 4, 'فارس قويدرجلول', '0784279410@local.store', '0784279410', '', 'الجزائر - الدرارية - بابا حسن', NULL, 100000.00, 0.00, 600.00, 0.00, 100600.00, 'pending', 'cash_on_delivery', 'pending', '', NULL, NULL, '2026-02-01 02:07:23', NULL, NULL, NULL, '2026-02-01 02:50:28'),
+(8, 'ORD-20260201-520577', 4, 'ريان بورعدة', '0784279410@local.store', '0784279410', '', 'الجزائر - الدرارية - بابا حسن', NULL, 200000.00, 0.00, 600.00, 0.00, 200600.00, 'confirmed', 'bank_transfer', 'pending', '', NULL, NULL, '2026-02-01 02:17:27', NULL, NULL, NULL, '2026-02-01 02:52:34'),
+(9, 'ORD-20260201-095818', 4, 'فارس قويدرجلول', '0784279410@local.store', '0784279410', '', 'تمنراست - تاظروك - أدلس', NULL, 50000.00, 0.00, 600.00, 0.00, 50600.00, 'pending', 'cash_on_delivery', 'pending', '', NULL, NULL, '2026-02-01 02:22:05', NULL, NULL, NULL, '2026-02-01 02:50:28');
+
 -- --------------------------------------------------------
 
 --
@@ -2290,6 +2300,15 @@ CREATE TABLE `order_items` (
   `subtotal` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `product_sku`, `product_image`, `quantity`, `price`, `subtotal`, `created_at`) VALUES
+(6, 7, 6, 'حاسوب من الجيل السابع', '', 'uploads/products/697e8a589710a_1769900632.jpg', 2, 50000.00, 100000.00, '2026-02-01 02:07:23'),
+(7, 8, 6, 'حاسوب من الجيل السابع', '', 'uploads/products/697e8a589710a_1769900632.jpg', 4, 50000.00, 200000.00, '2026-02-01 02:17:27'),
+(8, 9, 6, 'حاسوب من الجيل السابع', '', 'uploads/products/697e8a589710a_1769900632.jpg', 1, 50000.00, 50000.00, '2026-02-01 02:22:05');
 
 -- --------------------------------------------------------
 
@@ -2343,7 +2362,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name_ar`, `name_en`, `slug`, `sku`, `model`, `brand`, `category_id`, `price`, `original_price`, `discount_percentage`, `stock_count`, `in_stock`, `min_stock`, `processor`, `ram`, `storage`, `gpu`, `screen_size`, `screen_resolution`, `battery`, `weight`, `os`, `ports`, `description_short`, `description_full`, `warranty`, `badge`, `status`, `views`, `sales`, `rating`, `review_count`, `meta_title`, `meta_description`, `meta_keywords`, `created_at`, `updated_at`) VALUES
-(6, 'حاسوب من الجيل السابع', 'i7 7éme', '', '', '', '', 5, 50000.00, 56000.00, 0, 7, 1, 5, 'i7', '16', '500', '3060', '16', '4k', '5', '', 'ubuntu', NULL, '', '', '1', 'sale', 'active', 69, 13, 0.00, 0, NULL, NULL, NULL, '2026-01-31 01:16:19', '2026-02-01 00:26:26');
+(6, 'حاسوب من الجيل السابع', 'i7 7éme', '', '', '', '', 5, 50000.00, 56000.00, 0, -1, 0, 5, 'i7', '16', '500', '3060', '16', '4k', '5', '', 'ubuntu', NULL, '', '', '1', 'sale', 'active', 87, 23, 0.00, 0, NULL, NULL, NULL, '2026-01-31 01:16:19', '2026-02-01 03:12:41');
 
 -- --------------------------------------------------------
 
@@ -2595,7 +2614,7 @@ ALTER TABLE `communes`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `phone_unique` (`phone`),
   ADD KEY `idx_email` (`email`),
   ADD KEY `idx_phone` (`phone`);
 
@@ -2709,7 +2728,7 @@ ALTER TABLE `communes`
 -- AUTO_INCREMENT pour la table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT pour la table `dairas`
@@ -2721,13 +2740,13 @@ ALTER TABLE `dairas`
 -- AUTO_INCREMENT pour la table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `products`

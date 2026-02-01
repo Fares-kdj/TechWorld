@@ -3,7 +3,7 @@ require_once 'includes/functions.php';
 
 $pageTitle = 'إتمام الطلب';
 $shippingCost = getSetting('shipping_cost', 500);
-$currency = getSetting('currency', 'دج');
+$currency = getSetting('currency_symbol', 'دج');
 
 include 'includes/header.php';
 ?>

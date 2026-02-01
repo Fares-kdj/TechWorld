@@ -98,6 +98,11 @@ $pageTitle = $pageTitle ?? 'متجر التقنية';
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    
+    <!-- تمرير رمز العملة لـ JavaScript -->
+    <script>
+        const CURRENCY_SYMBOL = '<?php echo getSetting("currency_symbol", "دج"); ?>';
+    </script>
 </head>
 <body>
     <!-- الهيدر -->

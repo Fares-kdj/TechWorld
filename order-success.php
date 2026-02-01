@@ -47,15 +47,15 @@ include 'includes/header.php';
             <div style="display: grid; gap: 0.5rem;">
                 <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
                     <span style="color: var(--gray);">المجموع الفرعي:</span>
-                    <span style="font-weight: 600;"><?php echo number_format($order['subtotal']); ?> <?php echo getSetting('currency', 'دج'); ?></span>
+                    <span style="font-weight: 600;"><?php echo number_format($order['subtotal']); ?> <?php echo getSetting('currency_symbol', 'دج'); ?></span>
                 </div>
                 <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
                     <span style="color: var(--gray);">الشحن:</span>
-                    <span style="font-weight: 600;"><?php echo number_format($order['shipping_cost']); ?> <?php echo getSetting('currency', 'دج'); ?></span>
+                    <span style="font-weight: 600;"><?php echo number_format($order['shipping_cost']); ?> <?php echo getSetting('currency_symbol', 'دج'); ?></span>
                 </div>
                 <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 1.125rem; font-weight: 700;">
                     <span>الإجمالي:</span>
-                    <span style="color: var(--primary);"><?php echo number_format($order['total']); ?> <?php echo getSetting('currency', 'دج'); ?></span>
+                    <span style="color: var(--primary);"><?php echo number_format($order['total']); ?> <?php echo getSetting('currency_symbol', 'دج'); ?></span>
                 </div>
             </div>
         </div>
