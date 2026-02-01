@@ -1,0 +1,19 @@
+RewriteEngine On
+
+# Ensure HTTPS (Optional - uncomment if you have SSL)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Sitemap
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# Clean URLs (remove .php)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+# Prevent directory listing
+Options -Indexes
+
+# Error Pages
+ErrorDocument 404 /index.php
