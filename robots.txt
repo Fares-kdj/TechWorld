@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# السماح لمحركات البحث بالوصول إلى المحتوى المهم
+Allow: /index.php
+Allow: /products.php
+Allow: /product.php
+Allow: /contact.php
+Allow: /assets/
+
+# منع الوصول إلى صفحات الإدارة
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /config/
+
+# منع الوصول إلى الصفحات الديناميكية غير المرغوبة
+Disallow: /cart.php
+Disallow: /checkout.php
+Disallow: /process-order.php
+
+# Sitemap
+Sitemap: http://localhost/TechWorld/sitemap.xml

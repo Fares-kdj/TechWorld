@@ -60,7 +60,7 @@ if (isset($_GET['view'])) {
     }
 }
 
-$currency = getSetting('currency', 'دج');
+$currency = getSetting('currency_symbol', 'دج');
 ?>
 
 <?php if ($viewCustomer): ?>

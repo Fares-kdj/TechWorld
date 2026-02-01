@@ -37,6 +37,7 @@ $specs = [
     'os' => $product['os']
 ];
 
+$currency = getSetting('currency_symbol', 'دج');
 $pageTitle = $name;
 include 'includes/header.php';
 
@@ -511,9 +512,9 @@ foreach ($relatedProductsRaw as $rp) {
             <h1 class="product-title"><?php echo htmlspecialchars($name); ?></h1>
             
             <div class="product-price">
-                <span class="current-price"><?php echo formatPrice($price); ?> د.ج</span>
+                <span class="current-price"><?php echo formatPrice($price); ?> <?php echo $currency; ?></span>
                 <?php if ($originalPrice): ?>
-                    <span class="original-price"><?php echo formatPrice($originalPrice); ?> د.ج</span>
+                    <span class="original-price"><?php echo formatPrice($originalPrice); ?> <?php echo $currency; ?></span>
                 <?php endif; ?>
             </div>
 
@@ -621,7 +622,7 @@ foreach ($relatedProductsRaw as $rp) {
                 <a href="product.php?id=<?php echo $rp['id']; ?>" class="related-card-mobile" style="text-decoration: none; color: inherit;">
                     <img src="<?php echo $rp['image']; ?>">
                     <div style="font-weight: 700; margin-bottom: 0.5rem;"><?php echo htmlspecialchars($rp['name_ar']); ?></div>
-                    <div style="color: var(--primary); font-weight: 700;"><?php echo formatPrice($rp['price']); ?> ر.س</div>
+                    <div style="color: var(--primary); font-weight: 700;"><?php echo formatPrice($rp['price']); ?> <?php echo $currency; ?></div>
                 </a>
             <?php endforeach; ?>
         </div>

@@ -15,7 +15,7 @@ $monthSales = $pdo->query("SELECT COALESCE(SUM(total), 0) as total FROM orders W
 $yearSales = $pdo->query("SELECT COALESCE(SUM(total), 0) as total FROM orders WHERE YEAR(ordered_at) = YEAR(CURDATE())")->fetchColumn();
 
 
-$currency = getSetting('currency', 'دج');
+$currency = getSetting('currency_symbol', 'دج');
 ?>
 
 
@@ -115,6 +115,7 @@ $currency = getSetting('currency', 'دج');
                                 <th>رقم الطلب</th>
                                 <th>العميل</th>
                                 <th>المبلغ</th>
+                                <th>طريقة الدفع</th>
                                 <th>الحالة</th>
                                 <th>التاريخ</th>
                                 <th>إجراءات</th>
@@ -127,6 +128,20 @@ $currency = getSetting('currency', 'دج');
                                         <td><strong><?php echo htmlspecialchars($order['order_number']); ?></strong></td>
                                         <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
                                         <td><?php echo number_format($order['total']); ?> <?php echo $currency; ?></td>
+                                        <td>
+                                            <?php
+                                            $paymentMethods = [
+                                                'cash_on_delivery' => 'الدفع عند الاستلام',
+                                                'bank_transfer' => 'تحويل بنكي',
+                                                'credit_card' => 'بطاقة ائتمان',
+                                                'mada' => 'مدى'
+                                            ];
+                                            ?>
+                                            <span class="badge bg-secondary">
+                                                <i class="bi bi-credit-card me-1"></i>
+                                                <?php echo $paymentMethods[$order['payment_method']] ?? $order['payment_method']; ?>
+                                            </span>
+                                        </td>
                                         <td>
                                             <?php
                                             $statusClass = [

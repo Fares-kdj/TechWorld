@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         updateSetting('site_name', sanitizeInput($_POST['site_name']));
         updateSetting('site_description', sanitizeInput($_POST['site_description']));
         updateSetting('currency', sanitizeInput($_POST['currency']));
+        updateSetting('currency_symbol', sanitizeInput($_POST['currency_symbol']));
         updateSetting('phone', sanitizeInput($_POST['phone']));
         updateSetting('email', sanitizeInput($_POST['email']));
         updateSetting('address', sanitizeInput($_POST['address']));
@@ -86,10 +87,17 @@ include 'includes/header.php';
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label">العملة</label>
+                        <label class="form-label">اسم العملة</label>
                         <input type="text" class="form-control" name="currency" 
-                               value="<?php echo $settings['currency'] ?? 'دج'; ?>" required>
-                        <small class="text-muted">مثال: دج، $، €</small>
+                               value="<?php echo $settings['currency'] ?? 'دينار جزائري'; ?>" required>
+                        <small class="text-muted">مثال: دينار جزائري، دولار أمريكي، يورو</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">اختصار العملة (الرمز)</label>
+                        <input type="text" class="form-control" name="currency_symbol" 
+                               value="<?php echo $settings['currency_symbol'] ?? 'دج'; ?>" required>
+                        <small class="text-muted">مثال: دج، $، €، ر.س</small>
                     </div>
                     
                     <div class="mb-3">

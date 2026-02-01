@@ -121,9 +121,10 @@ function getDashboardStats() {
  * الحصول على آخر الطلبات
  */
 function getRecentOrders($limit = 10) {
-    $sql = "SELECT o.*, c.name as customer_name 
+    // استخدام البيانات من جدول orders مباشرة بدلاً من JOIN
+    // لأن جدول orders يحتوي بالفعل على customer_name
+    $sql = "SELECT o.* 
             FROM orders o 
-            LEFT JOIN customers c ON o.customer_id = c.id 
             ORDER BY o.ordered_at DESC 
             LIMIT :limit";
     

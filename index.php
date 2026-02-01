@@ -10,6 +10,7 @@ $pageTitle = 'الرئيسية';
 $featuredProducts = getFeaturedProducts(8);
 $saleProducts = getOnSaleProducts(8);
 $categories = getAllCategories();
+$currency = getSetting('currency_symbol', 'دج');
 
 include 'includes/header.php';
 ?>
@@ -114,9 +115,9 @@ include 'includes/header.php';
                             <p class="product-model"><?php echo clean($product['model'] ?? ''); ?></p>
                             
                             <div class="product-price">
-                                <span class="current-price"><?php echo formatPrice($product['price']); ?> د.ج</span>
+                                <span class="current-price"><?php echo formatPrice($product['price']); ?> <?php echo $currency; ?></span>
                                 <?php if ($product['original_price'] && $product['original_price'] > $product['price']): ?>
-                                    <span class="original-price"><?php echo formatPrice($product['original_price']); ?> د.ج</span>
+                                    <span class="original-price"><?php echo formatPrice($product['original_price']); ?> <?php echo $currency; ?></span>
                                 <?php endif; ?>
                             </div>
                             
@@ -220,9 +221,9 @@ include 'includes/header.php';
                         <p class="product-model"><?php echo clean($product['model'] ?? ''); ?></p>
                         
                         <div class="product-price">
-                            <span class="current-price" style="color: #dc3545;"><?php echo formatPrice($product['price']); ?> د.ج</span>
+                            <span class="current-price" style="color: #dc3545;"><?php echo formatPrice($product['price']); ?> <?php echo $currency; ?></span>
                             <?php if ($product['original_price'] && $product['original_price'] > $product['price']): ?>
-                                <span class="original-price"><?php echo formatPrice($product['original_price']); ?> د.ج</span>
+                                <span class="original-price"><?php echo formatPrice($product['original_price']); ?> <?php echo $currency; ?></span>
                                 <?php 
                                 $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
                                 ?>

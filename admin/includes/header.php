@@ -284,10 +284,17 @@ $newOrdersCount = $result['count'] ?? 0;
                 <span>الإعدادات</span>
             </a>
             
+            <?php if ($_SESSION['admin_role'] === 'super_admin'): ?>
             <a href="admins.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'admins.php' ? 'active' : ''; ?>">
                 <i class="bi bi-shield-lock"></i>
                 <span>المديرين</span>
             </a>
+            
+            <a href="security-settings.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'security-settings.php' ? 'active' : ''; ?>">
+                <i class="bi bi-key"></i>
+                <span>إعدادات الأمان</span>
+            </a>
+            <?php endif; ?>
             
             <a href="reports.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'reports.php' ? 'active' : ''; ?>">
                 <i class="bi bi-graph-up"></i>

@@ -55,23 +55,36 @@ try {
     // توليد رقم الطلب
     $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 6));
     
-    // إنشاء/تحديث العميل
-    $customerSql = "INSERT INTO customers (name, email, phone, address, city) 
-                   VALUES (?, ?, ?, ?, ?) 
-                   ON DUPLICATE KEY UPDATE 
-                   name = VALUES(name), phone = VALUES(phone), address = VALUES(address), city = VALUES(city)";
-    $customerStmt = $conn->prepare($customerSql);
-    $customerStmt->execute([
-        $orderData['name'],
-        $orderData['email'],
-        $orderData['phone'],
-        $orderData['address'],
-        $orderData['city']
-    ]);
+    // إنشاء/تحديث العميل (استخدام الهاتف كمعرف فريد)
+    // أولاً نتحقق إذا كان العميل موجود بناءً على رقم الهاتف
+    $customerCheckStmt = $conn->prepare("SELECT id FROM customers WHERE phone = ?");
+    $customerCheckStmt->execute([$orderData['phone']]);
+    $existingCustomer = $customerCheckStmt->fetch();
     
-    $customerId = $conn->lastInsertId();
-    if (!$customerId) {
-        $customerId = $conn->query("SELECT id FROM customers WHERE email = '{$orderData['email']}'")->fetchColumn();
+    if ($existingCustomer) {
+        // تحديث بيانات العميل الموجود
+        $customerId = $existingCustomer['id'];
+        $updateCustomerSql = "UPDATE customers SET name = ?, email = ?, address = ?, city = ? WHERE id = ?";
+        $updateStmt = $conn->prepare($updateCustomerSql);
+        $updateStmt->execute([
+            $orderData['name'],
+            $orderData['email'],
+            $orderData['address'],
+            $orderData['city'],
+            $customerId
+        ]);
+    } else {
+        // إنشاء عميل جديد
+        $insertCustomerSql = "INSERT INTO customers (name, email, phone, address, city) VALUES (?, ?, ?, ?, ?)";
+        $insertStmt = $conn->prepare($insertCustomerSql);
+        $insertStmt->execute([
+            $orderData['name'],
+            $orderData['email'],
+            $orderData['phone'],
+            $orderData['address'],
+            $orderData['city']
+        ]);
+        $customerId = $conn->lastInsertId();
     }
     
     // إنشاء الطلب

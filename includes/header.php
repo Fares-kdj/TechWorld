@@ -11,9 +11,82 @@ $pageTitle = $pageTitle ?? 'متجر التقنية';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?php echo clean($pageTitle); ?> - <?php echo clean($settings['site_name'] ?? 'متجر التقنية'); ?></title>
-    <meta name="description" content="متجر إلكتروني متخصص في بيع الحواسيب المحمولة والإلكترونيات">
-    <meta name="keywords" content="لابتوب, كمبيوتر, تقنية, أجهزة">
+    
+    <?php 
+    // تحديد meta tags حسب الصفحة
+    $isHomePage = basename($_SERVER['PHP_SELF']) == 'index.php';
+    
+    if ($isHomePage):
+        // SEO محسّن للصفحة الرئيسية
+        $seoTitle = 'TechWorld - متجر حواسيب محمولة | أفضل أسعار اللابتوب في الجزائر';
+        $seoDescription = 'TechWorld31 متجر إلكتروني متخصص في بيع الحواسيب المحمولة واللابتوب بأفضل الأسعار في الجزائر. جودة عالية، ضمان موثوق، توصيل سريع لجميع الولايات. اكتشف أحدث موديلات HP, Dell, Lenovo, Asus';
+        $seoKeywords = 'حواسيب محمولة, لابتوب, متجر حواسيب, TechWorld, TechWorld31, شراء لابتوب, حاسوب محمول للبيع, لابتوب الجزائر, أسعار الحواسيب المحمولة, متجر إلكتروني حواسيب, HP laptop, Dell laptop, Lenovo, Asus, gaming laptop, ordinateur portable Algérie';
+    else:
+        $seoTitle = clean($pageTitle) . ' - ' . clean($settings['site_name'] ?? 'TechWorld');
+        $seoDescription = 'متجر إلكتروني متخصص في بيع الحواسيب المحمولة والإلكترونيات بأفضل الأسعار';
+        $seoKeywords = 'لابتوب, كمبيوتر, حواسيب محمولة, تقنية, TechWorld';
+    endif;
+    ?>
+    
+    <title><?php echo $seoTitle; ?></title>
+    <meta name="description" content="<?php echo $seoDescription; ?>">
+    <meta name="keywords" content="<?php echo $seoKeywords; ?>">
+    <meta name="author" content="TechWorld31">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="<?php echo 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="<?php echo $isHomePage ? 'website' : 'article'; ?>">
+    <meta property="og:url" content="<?php echo 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+    <meta property="og:title" content="<?php echo $seoTitle; ?>">
+    <meta property="og:description" content="<?php echo $seoDescription; ?>">
+    <meta property="og:image" content="<?php echo 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST']; ?>/assets/images/logo.jpg">
+    <meta property="og:site_name" content="TechWorld31">
+    <meta property="og:locale" content="ar_DZ">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="<?php echo 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+    <meta name="twitter:title" content="<?php echo $seoTitle; ?>">
+    <meta name="twitter:description" content="<?php echo $seoDescription; ?>">
+    <meta name="twitter:image" content="<?php echo 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST']; ?>/assets/images/logo.jpg">
+    
+    <?php if ($isHomePage): ?>
+    <!-- Schema.org للصفحة الرئيسية -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "TechWorld31",
+      "alternateName": "TechWorld",
+      "url": "<?php echo 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST']; ?>",
+      "description": "<?php echo $seoDescription; ?>",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "<?php echo 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST']; ?>/products.php?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "TechWorld31",
+      "image": "<?php echo 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST']; ?>/assets/images/logo.jpg",
+      "description": "متجر إلكتروني متخصص في بيع الحواسيب المحمولة واللابتوب بأفضل الأسعار في الجزائر",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "DZ",
+        "addressLocality": "الجزائر"
+      },
+      "priceRange": "$$",
+      "telephone": "<?php echo clean($settings['phone'] ?? ''); ?>",
+      "email": "<?php echo clean($settings['email'] ?? ''); ?>",
+      "url": "<?php echo 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST']; ?>"
+    }
+    </script>
+    <?php endif; ?>
     
     <!-- الخطوط -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,6 +98,11 @@ $pageTitle = $pageTitle ?? 'متجر التقنية';
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    
+    <!-- تمرير رمز العملة لـ JavaScript -->
+    <script>
+        const CURRENCY_SYMBOL = '<?php echo getSetting("currency_symbol", "دج"); ?>';
+    </script>
 </head>
 <body>
     <!-- الهيدر -->

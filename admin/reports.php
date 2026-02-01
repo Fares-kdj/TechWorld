@@ -106,7 +106,7 @@ $topCustomers = $pdo->query("
     LIMIT 10
 ")->fetchAll();
 
-$currency = getSetting('currency', 'دج');
+$currency = getSetting('currency_symbol', 'دج');
 ?>
 
 <!-- فلتر الفترة -->
